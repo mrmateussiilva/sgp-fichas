@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Painéis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .close-tab {
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .add-painel-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .form-produto {
+            display: none;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body class="p-3 bg-light">
+
+    <div class="container">
+        <h2 class="mb-3 text-primary">📌 Gerenciamento de Pedidos</h2>
+        
+        <div class="bg-white p-3 rounded shadow-sm mb-4">
+            <h5 class="text-secondary">Dados do Pedido</h5>
+            <div class="row g-3">
+                <div class="col-md-2">
+                    <label class="form-label">ID do Pedido</label>
+                    <input type="text" id="id-pedido" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Nome do Cliente</label>
+                    <input type="text" id="nome-cliente" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Telefone</label>
+                    <input type="text" id="telefone-cliente" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Cidade</label>
+                    <input type="text" id="cidade-cliente" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Forma de Envio</label>
+                    <input type="text" id="forma-envio" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Data de Entrada</label>
+                    <input type="date" id="data-entrada" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Data de Entrega</label>
+                    <input type="date" id="data-entrega" class="form-control" oninput="salvarDados()">
+                </div>
+                <div class="col-md-12">
+                    <label class="form-label">Observação</label>
+                    <textarea id="observacao" class="form-control" rows="3" oninput="salvarDados()"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Abas -->
+        <ul class="nav nav-tabs" id="painel-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active d-flex align-items-center" id="painel-1-tab" data-bs-toggle="tab" data-bs-target="#painel-1" type="button" role="tab">
+                    Painel 1
+                    <span class="ms-2 text-danger fw-bold close-tab" onclick="removerPainel('painel-1', event)">✖</span>
+                </button>
+            </li>
+        </ul>
+
+        <!-- Conteúdo das abas -->
+        <div class="tab-content" id="painel-tab-content">
+            <div class="tab-pane fade show active" id="painel-1" role="tabpanel">
+                <div class="border p-3 rounded mt-2 shadow-sm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="tipo-producao-1">Tipo de Produção:</label>
+                            <select id="tipo-producao-1" class="form-select tipo-producao" onchange="salvarDados()">
+                                <option value="painel">Painel</option>
+                                <option value="totem">Totem</option>
+                                <option value="lona">Lona</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label>Valor:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">R$</span>
+                                <input type="number" class="form-control valor-painel" id="valor-1" value="0" step="0.01" oninput="calcularTotal(); salvarDados()">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div id="form-painel-1" class="form-produto">
+                                <h5>Detalhes do Painel</h5>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label>Descrição:</label>
+                                        <input type="text" class="form-control" id="desc-painel-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Largura (cm):</label>
+                                        <input type="number" class="form-control" id="largura-painel-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Altura (cm):</label>
+                                        <input type="number" class="form-control" id="altura-painel-1" oninput="salvarDados()">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="form-totem-1" class="form-produto">
+                                <h5>Detalhes do Totem</h5>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label>Descrição:</label>
+                                        <input type="text" class="form-control" id="desc-totem-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Altura (cm):</label>
+                                        <input type="number" class="form-control" id="altura-totem-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Largura (cm):</label>
+                                        <input type="number" class="form-control" id="largura-totem-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label>Material:</label>
+                                        <select class="form-select" id="material-totem-1" onchange="salvarDados()">
+                                            <option value="acm">ACM</option>
+                                            <option value="pvc">PVC</option>
+                                            <option value="madeira">Madeira</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="form-lona-1" class="form-produto">
+                                <h5>Detalhes da Lona</h5>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label>Descrição:</label>
+                                        <input type="text" class="form-control" id="desc-lona-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Largura (m):</label>
+                                        <input type="number" step="0.01" class="form-control" id="largura-lona-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Altura (m):</label>
+                                        <input type="number" step="0.01" class="form-control" id="altura-lona-1" oninput="salvarDados()">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label>Acabamento:</label>
+                                        <select class="form-select" id="acabamento-lona-1" onchange="salvarDados()">
+                                            <option value="ilhos">Ilhós</option>
+                                            <option value="bainha">Bainha</option>
+                                            <option value="bastao">Bastão</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botão flutuante para adicionar painéis -->
+        <button class="btn btn-primary btn-lg rounded-circle add-painel-btn" onclick="adicionarPainel()">+</button>
+
+        <div class="mt-4 p-3 bg-white rounded shadow-sm">
+            <h5 class="text-secondary">Resumo</h5>
+            <p class="mb-1">Total de Painéis: <strong id="total-paineis">1</strong></p>
+            <label class="form-label">Valor Total:</label>
+            <input type="text" id="total" class="form-control fw-bold text-success" value="R$ 0,00" disabled>
+        </div>
+
+        <div class="text-end mt-3 mb-5">
+            <button class="btn btn-success" onclick="salvarPedido()">Salvar</button>
+            <button class="btn btn-dark" onclick="imprimirPedido()">Imprimir</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let painelIndex = 1;
+        let pedidoCompleto = {
+            pedido: {},
+            items: []
+        };
+
+        // Função para inicializar os forms ao carregar a página
+        document.addEventListener("DOMContentLoaded", function () {
+            // Mostra o formulário de painel para o primeiro painel ao carregar
+            document.getElementById("form-painel-1").style.display = "block";
+            
+            // Inicializa o evento de mudança do tipo de produção para o primeiro painel
+            initProdTypeListener("tipo-producao-1", 1);
+            
+            // Carrega dados salvos
+            carregarDados();
+            
+            // Calcula total inicial
+            calcularTotal();
+        });
+
+        // Inicializa o evento de mudança para um tipo de produção específico
+        function initProdTypeListener(selectId, panelId) {
+            const tipoProducao = document.getElementById(selectId);
+            
+            tipoProducao.addEventListener("change", function () {
+                let tipoSelecionado = this.value;
+                
+                // Esconde todos os formulários deste painel
+                document.querySelectorAll(`#painel-${panelId} .form-produto`).forEach(form => {
+                    form.style.display = "none";
+                });
+                
+                // Exibe o formulário correspondente
+                document.getElementById(`form-${tipoSelecionado}-${panelId}`).style.display = "block";
+                
+                salvarDados();
+            });
+        }
+
+        // Adiciona um novo painel
+        function adicionarPainel() {
+            painelIndex++;
+            const tabList = document.getElementById("painel-tabs");
+            const tabContent = document.getElementById("painel-tab-content");
+
+            const tabId = `painel-${painelIndex}`;
+
+            // Criar nova aba
+            const newTab = `
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link d-flex align-items-center" id="${tabId}-tab" data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab">
+                        Painel ${painelIndex} 
+                        <span class="ms-2 text-danger fw-bold close-tab" onclick="removerPainel('${tabId}', event)">✖</span>
+                    </button>
+                </li>
+            `;
+
+            // Criar conteúdo da aba
+            const newTabContent = `
+                <div class="tab-pane fade" id="${tabId}" role="tabpanel">
+                    <div class="border p-3 rounded mt-2 shadow-sm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="tipo-producao-${painelIndex}">Tipo de Produção:</label>
+                                <select id="tipo-producao-${painelIndex}" class="form-select tipo-producao" onchange="salvarDados()">
+                                    <option value="painel">Painel</option>
+                                    <option value="totem">Totem</option>
+                                    <option value="lona">Lona</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label>Valor:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="number" class="form-control valor-painel" id="valor-${painelIndex}" value="0" step="0.01" oninput="calcularTotal(); salvarDados()">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div id="form-painel-${painelIndex}" class="form-produto">
+                                    <h5>Detalhes do Painel</h5>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label>Descrição:</label>
+                                            <input type="text" class="form-control" id="desc-painel-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Largura (cm):</label>
+                                            <input type="number" class="form-control" id="largura-painel-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Altura (cm):</label>
+                                            <input type="number" class="form-control" id="altura-painel-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="form-totem-${painelIndex}" class="form-produto">
+                                    <h5>Detalhes do Totem</h5>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label>Descrição:</label>
+                                            <input type="text" class="form-control" id="desc-totem-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Altura (cm):</label>
+                                            <input type="number" class="form-control" id="altura-totem-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Largura (cm):</label>
+                                            <input type="number" class="form-control" id="largura-totem-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label>Material:</label>
+                                            <select class="form-select" id="material-totem-${painelIndex}" onchange="salvarDados()">
+                                                <option value="acm">ACM</option>
+                                                <option value="pvc">PVC</option>
+                                                <option value="madeira">Madeira</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="form-lona-${painelIndex}" class="form-produto">
+                                    <h5>Detalhes da Lona</h5>
+                                    <div class="row">
+                                        <div class="col-md-12 mb-3">
+                                            <label>Descrição:</label>
+                                            <input type="text" class="form-control" id="desc-lona-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Largura (m):</label>
+                                            <input type="number" step="0.01" class="form-control" id="largura-lona-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Altura (m):</label>
+                                            <input type="number" step="0.01" class="form-control" id="altura-lona-${painelIndex}" oninput="salvarDados()">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label>Acabamento:</label>
+                                            <select class="form-select" id="acabamento-lona-${painelIndex}" onchange="salvarDados()">
+                                                <option value="ilhos">Ilhós</option>
+                                                <option value="bainha">Bainha</option>
+                                                <option value="bastao">Bastão</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            tabList.insertAdjacentHTML("beforeend", newTab);
+            tabContent.insertAdjacentHTML("beforeend", newTabContent);
+
+            // Ativar a nova aba automaticamente
+            document.getElementById(`${tabId}-tab`).click();
+            
+            // Mostrar o formulário de painel por padrão
+            document.getElementById(`form-painel-${painelIndex}`).style.display = "block";
+            
+            // Inicializar o evento de mudança do tipo de produção
+            initProdTypeListener(`tipo-producao-${painelIndex}`, painelIndex);
+            
+            calcularTotal();
+            salvarDados(); // Salvar dados após adicionar um novo painel
+        }
+
+        // Remove um painel
+        function removerPainel(tabId, event) {
+            event.stopPropagation();
+            
+            // Não remover se é o único painel restante
+            if (document.querySelectorAll('#painel-tabs .nav-item').length <= 1) {
+                alert("Você não pode remover o último painel.");
+                return;
+            }
+            
+            const tab = document.getElementById(`${tabId}-tab`);
+            const isActive = tab.classList.contains('active');
+            const painelNum = tabId.split('-')[1]; // Extrair o número do painel
+            
+            // Remover o painel
+            document.getElementById(tabId).remove();
+            tab.parentElement.remove();
+            
+            // Se o painel removido estava ativo, ativar o primeiro painel
+            if (isActive) {
+                const firstTab = document.querySelector('#painel-tabs .nav-link');
+                if (firstTab) {
+                    firstTab.click();
+                }
+            }
+            
+            calcularTotal();
+            salvarDados(); // Salvar dados após remover um painel
+        }
+
+        // Calcula o valor total dos painéis
+        function calcularTotal() {
+            let total = 0;
+            let count = document.querySelectorAll('#painel-tabs .nav-item').length;
+            
+            document.querySelectorAll(".valor-painel").forEach(input => {
+                total += parseFloat(input.value) || 0;
+            });
+            
+            document.getElementById("total").value = "R$ " + total.toFixed(2);
+            document.getElementById("total-paineis").innerText = count;
+        }
+
+        // Coleta os dados do pedido e seus itens
+        function coletarDadosPedido() {
+            // Coletar dados do cabeçalho do pedido
+            const dadosPedido = {
+                id: document.getElementById("id-pedido").value,
+                cliente: document.getElementById("nome-cliente").value,
+                telefone: document.getElementById("telefone-cliente").value,
+                cidade: document.getElementById("cidade-cliente").value,
+                envio: document.getElementById("forma-envio").value,
+                entrada: document.getElementById("data-entrada").value,
+                entrega: document.getElementById("data-entrega").value,
+                observacao: document.getElementById("observacao").value,
+                valorTotal: document.getElementById("total").value
+            };
+            
+            // Coletar dados de todos os painéis
+            const items = [];
+            const tabs = document.querySelectorAll('[id^="painel-"][id$="-tab"]');
+            
+            tabs.forEach(tab => {
+                const painelId = tab.id.replace('-tab', '');
+                const painelNum = painelId.split('-')[1];
+                
+                const tipoProducao = document.getElementById(`tipo-producao-${painelNum}`).value;
+                const valor = document.getElementById(`valor-${painelNum}`).value;
+                
+                let dadosPainel = {
+                    index: parseInt(painelNum),
+                    tipo: tipoProducao,
+                    valor: valor
+                };
+                
+                // Dependendo do tipo, salvar os dados específicos
+                if (tipoProducao === 'painel') {
+                    dadosPainel.descricao = document.getElementById(`desc-painel-${painelNum}`)?.value || '';
+                    dadosPainel.largura = document.getElementById(`largura-painel-${painelNum}`)?.value || '';
+                    dadosPainel.altura = document.getElementById(`altura-painel-${painelNum}`)?.value || '';
+                } else if (tipoProducao === 'totem') {
+                    dadosPainel.descricao = document.getElementById(`desc-totem-${painelNum}`)?.value || '';
+                    dadosPainel.largura = document.getElementById(`largura-totem-${painelNum}`)?.value || '';
+                    dadosPainel.altura = document.getElementById(`altura-totem-${painelNum}`)?.value || '';
+                    dadosPainel.material = document.getElementById(`material-totem-${painelNum}`)?.value || '';
+                } else if (tipoProducao === 'lona') {
+                    dadosPainel.descricao = document.getElementById(`desc-lona-${painelNum}`)?.value || '';
+                    dadosPainel.largura = document.getElementById(`largura-lona-${painelNum}`)?.value || '';
+                    dadosPainel.altura = document.getElementById(`altura-lona-${painelNum}`)?.value || '';
+                    dadosPainel.acabamento = document.getElementById(`acabamento-lona-${painelNum}`)?.value || '';
+                }
+                
+                items.push(dadosPainel);
+            });
+            
+            return {
+                pedido: dadosPedido,
+                items: items
+            };
+        }
+
+        // Salva os dados do pedido e painéis no localStorage
+        function salvarDados() {
+            pedidoCompleto = coletarDadosPedido();
+            localStorage.setItem("pedidoCompleto", JSON.stringify(pedidoCompleto));
+        }
+
+        // Carrega os dados do pedido do localStorage
+        function carregarDados() {
+            const dadosSalvos = JSON.parse(localStorage.getItem("pedidoCompleto"));
+            
+            if (!dadosSalvos) return;
+            
+            // Carregar dados do pedido
+            if (dadosSalvos.pedido) {
+                document.getElementById("id-pedido").value = dadosSalvos.pedido.id || "";
+                document.getElementById("nome-cliente").value = dadosSalvos.pedido.cliente || "";
+                document.getElementById("telefone-cliente").value = dadosSalvos.pedido.telefone || "";
+                document.getElementById("cidade-cliente").value = dadosSalvos.pedido.cidade || "";
+                document.getElementById("forma-envio").value = dadosSalvos.pedido.envio || "";
+                document.getElementById("data-entrada").value = dadosSalvos.pedido.entrada || "";
+                document.getElementById("data-entrega").value = dadosSalvos.pedido.entrega || "";
+                document.getElementById("observacao").value = dadosSalvos.pedido.observacao || "";
+            }
+            
+            // Carregar painéis
+            if (dadosSalvos.items && dadosSalvos.items.length > 0) {
+                // Remover painel inicial se necessário
+                if (dadosSalvos.items[0].index !== 1) {
+                    document.getElementById("painel-1").remove();
+                    document.getElementById("painel-1-tab").parentElement.remove();
+                }
+                
+                // Adicionar painéis salvos
+                dadosSalvos.items.forEach((painel, index) => {
+                    // Se não for o primeiro painel ou o painel inicial já foi removido
+                    if (painel.index !== 1 || (index === 0 && document.querySelectorAll('#painel-tabs .nav-item').length === 0)) {
+                        painelIndex = painel.index;
+                        adicionarPainel();
+                    }
+                    
+                    // Preencher os dados do painel
+                    const tipoProd = document.getElementById(`tipo-producao-${painel.index}`);
+                    tipoProd.value = painel.tipo;
+                    tipoProd.dispatchEvent(new Event('change'));
+                    
+                    document.getElementById(`valor-${painel.index}`).value = painel.valor;
+                    
+                    if (painel.tipo === 'painel') {
+                        document.getElementById(`desc-painel-${painel.index}`).value = painel.descricao || '';
+                        document.getElementById(`largura-painel-${painel.index}`).value = painel.largura || '';
+                        document.getElementById(`altura-painel-${painel.index}`).value = painel.altura || '';
+                    } else if (painel.tipo === 'totem') {
+                        document.getElementById(`desc-totem-${painel.index}`).value = painel.descricao || '';
+                        document.getElementById(`largura-totem-${painel.index}`).value = painel.largura || '';
+                        document.getElementById(`altura-totem-${painel.index}`).value = painel.altura || '';
+                        document.getElementById(`material-totem-${painel.index}`).value = painel.material || 'acm';
+                    } else if (painel.tipo === 'lona') {
+                        document.getElementById(`desc-lona-${painel.index}`).value = painel.descricao || '';
+                        document.getElementById(`largura-lona-${painel.index}`).value = painel.largura || '';
+                        document.getElementById(`altura-lona-${painel.index}`).value = painel.altura || '';
+                        document.getElementById(`acabamento-lona-${painel.index}`).value = painel.acabamento || 'ilhos';
+                    }
+                });
+            }
+            
+            calcularTotal();
+            pedidoCompleto = dadosSalvos;
+        }
+        
+        // Função para salvar todo o pedido
+        function salvarPedido() {
+            salvarDados();
+            alert("Pedido salvo com sucesso!");
+        }
+        
+        // Função para imprimir o pedido
+        function imprimirPedido() {
+            window.print();
+        }
+    </script>
+</body>
+</html>
